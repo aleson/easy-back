@@ -19,4 +19,8 @@ router.get('/users', (req, res) => {
   db.all('User', res);
 });
 
+router.get('/save-awesome-user', (res) => {
+  db.saveAwesomUser(res);
+});
+
 module.exports = {router, media};

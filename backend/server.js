@@ -7,8 +7,8 @@ const errorHandler = require('./error-handler');
 // ------------------ Constants -------------------------
 const app = express();
 
-const hostname = process.env.BOOKLING_HOST;
-const port = process.env.BOOKLING_PORT;
+const hostname = '127.0.0.1'//process.env.BOOKLING_HOST;
+const port = 9090//process.env.BOOKLING_PORT;
 
 app.use('/', rest.router);
 app.use('/content', rest.media);
