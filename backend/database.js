@@ -9,8 +9,10 @@ mongoose.connect(`mongodb://${dbHost}:${dbPort}/${dbName}`, (err) => {
     console.log('Successfull connect');
 });
 
-const allUsers = (res) => {
-    UserModel.find({}).then((users) => {
+const allUsers = (res, size) => {
+    UserModel.find({})
+    .limit(size)
+    .then((users) => {
         res.send(users);
     });
 };
