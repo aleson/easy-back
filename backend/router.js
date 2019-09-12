@@ -1,8 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const media = express.static('media');
+const bodyParser = require('body-parser');
 
 const db = require('./database');
+const UserModel = require('./model/user');
+
+
+
+const urlencodedParser = bodyParser.urlencoded({extended: false});
 
 // Home page route
 router.get('/', (req, res) => {
@@ -15,12 +21,15 @@ router.get('/about', (req, res) => {
 });
 
 // Users list
-router.get('/users', (req, res) => {
-  db.all('User', res);
+router.get('/users', urlencodedParser, (req, res) => {
+  db.allUsers(res);
 });
 
-router.get('/save-awesome-user', (res) => {
-  db.saveAwesomUser(res);
+router.post('/user/save', urlencodedParser, (req, res) => {
+  if(!req.body) return res.sendStatus(400);
+  console.log(`req.body = ${JSON.stringify(req.body)}`);
+  db.saveUser(req.body);
+  res.send('Success!');
 });
 
 module.exports = {router, media};
