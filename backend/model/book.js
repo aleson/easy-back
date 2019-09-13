@@ -4,12 +4,11 @@ const uuid = require('node-uuid');
 const Schema = mongoose.Schema;
 
 const minValueCharacterOfName = 3;
-const maxValueCharacterOfName = 40;
+const maxValueCharacterOfName = 100;
 const invalidName = ` must have from ${minValueCharacterOfName} to ${maxValueCharacterOfName} characters`;
 const invalidNameLength = `Name ${invalidName}!`;
-const invalidPasswordLength = `Password must have more 8 symbols!`;
 
-const UserModelSchema = new Schema({
+const BookModelSchema = new Schema({
     _id: {
        type: String,
        default: () => uuid.v4(),
@@ -21,28 +20,16 @@ const UserModelSchema = new Schema({
         maxlength: [maxValueCharacterOfName, invalidNameLength],
         unique: false
     },
-    _surname: {
+    _genre: {
         type: String,
-        minlength: [minValueCharacterOfName, invalidNameLength],
-        maxlength: [maxValueCharacterOfName, invalidNameLength],
         unique: false
     },
     _description: {
         type: String,
         unique: false
     },
-    _username: {
-        type: String,
-        minlength: [minValueCharacterOfName, invalidNameLength],
-        maxlength: [maxValueCharacterOfName, invalidNameLength]
-    },
-    _password: {
-        type: String,
-        minlength: [8, invalidPasswordLength],
-        unique: false
-    },
-    _photo: Buffer,
-    _bookId: Schema.Types.ObjectId,
+    _file: Buffer,
+    _userId: Schema.Types.ObjectId,
     _creationDate: {
         type: Date,
         default: () => Date.now()
@@ -53,6 +40,6 @@ const UserModelSchema = new Schema({
     }
 });
 
-const UserModel = mongoose.model('User', UserModelSchema);
+const BookModel = mongoose.model('Book', BookModelSchema);
 
-module.exports = UserModel;
+module.exports = BookModel;
