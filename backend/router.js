@@ -16,7 +16,7 @@ router.get('/about', (req, res) => {
   res.send('About this site');
 });
 
-//Users or Authors
+// Users or Authors
 router.get('/user', urlencodedParser, (req,res) => {
   db.findUserById(res, req.param('_id'));
 });
@@ -44,7 +44,7 @@ router.delete('/user/delete', urlencodedParser, (req, res) => {
   res.send('Success!');
 }); 
 
-//Books
+// Books
 router.get('/book', urlencodedParser, (req,res) => {
   db.findBookById(res, req.param('_id'));
 });
@@ -70,6 +70,34 @@ router.delete('/book/delete', urlencodedParser, (req, res) => {
   if(!req.param('_id')) return res.sendStatus(400);
   db.deleteBook(req.param('_id'));
   res.send('Success!');
-}); 
+});
+
+// Genres
+router.get('/genre', urlencodedParser, (req,res) => {
+  db.findGenreById(res, req.param('_id'));
+});
+
+router.get('/genres', urlencodedParser, (req, res) => {
+  db.findAllGenres(res, 50);
+});
+
+router.post('/genre/save', urlencodedParser, (req, res) => {
+  if(!req.body) return res.sendStatus(400);
+  console.log(`req.body = ${JSON.stringify(req.body)}`);
+  db.saveGenre(req.body);
+  res.send('Success!');
+});
+
+router.put('/genre/update', urlencodedParser, (req, res) => {
+  if(!req.body) return res.sendStatus(400);
+  db.updateGenre(req.body);
+  res.send('Success!');
+});
+
+router.delete('/genre/delete', urlencodedParser, (req, res) => {
+  if(!req.param('_id')) return res.sendStatus(400);
+  db.deleteGenre(req.param('_id'));
+  res.send('Success!');
+});
 
 module.exports = {router, media};

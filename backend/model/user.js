@@ -9,6 +9,9 @@ const invalidName = ` must have from ${minValueCharacterOfName} to ${maxValueCha
 const invalidNameLength = `Name ${invalidName}!`;
 const invalidPasswordLength = `Password must have more 8 symbols!`;
 
+/**
+ * This schema is view of users/authors/books.
+ */
 const UserModelSchema = new Schema({
     _id: {
        type: String,
@@ -42,7 +45,10 @@ const UserModelSchema = new Schema({
         unique: false
     },
     _photo: Buffer,
-    _bookId: Schema.Types.ObjectId,
+    _bookId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Book'
+    },
     _creationDate: {
         type: Date,
         default: () => Date.now()
@@ -50,7 +56,8 @@ const UserModelSchema = new Schema({
     _modificationDate: {
         type: Date,
         default: () => Date.now()
-    }
+    },
+    _url: String
 });
 
 const UserModel = mongoose.model('User', UserModelSchema);

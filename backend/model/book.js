@@ -8,6 +8,9 @@ const maxValueCharacterOfName = 100;
 const invalidName = ` must have from ${minValueCharacterOfName} to ${maxValueCharacterOfName} characters`;
 const invalidNameLength = `Name ${invalidName}!`;
 
+/**
+ * Book is view of book object.
+ */
 const BookModelSchema = new Schema({
     _id: {
        type: String,
@@ -21,15 +24,19 @@ const BookModelSchema = new Schema({
         unique: false
     },
     _genre: {
-        type: String,
-        unique: false
+        type: Schema.Types.ObjectId,
+        ref: 'Genre',
+        required: true
     },
     _description: {
         type: String,
         unique: false
     },
-    _file: Buffer,
-    _userId: Schema.Types.ObjectId,
+    _url: String,
+    _userId: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
     _creationDate: {
         type: Date,
         default: () => Date.now()
