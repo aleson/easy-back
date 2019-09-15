@@ -1,12 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const media = express.static('media');
 const bodyParser = require('body-parser');
+const fs = require('fs');
 
 const db = require('./database');
+const store = require('./service/storage');
 
-
-const urlencodedParser = bodyParser.urlencoded({extended: false});
+const urlencodedParser = bodyParser.urlencoded({extended: true});
+const filePath = `${__dirname}/media/file/`;
+const photoPath = `${__dirname}/media/photo/`;
 
 router.get('/', (req, res) => {
   res.send('home page');
@@ -100,4 +102,45 @@ router.delete('/genre/delete', urlencodedParser, (req, res) => {
   res.send('Success!');
 });
 
-module.exports = {router, media};
+// Store files
+router.post('/uploadfile', store.upload.single('file'), (req, res, next) => {
+  const file = req.file;
+  if(!req.param('type')) res.sendStatus(400);
+  if (!file) {
+    const error = new Error('Please upload a file!');
+    error.httpStatusCode = 400;
+    return next(error);
+  }
+  if(req.param('type') === 'Photo') {
+    fs.rename(filePath+file.originalname, photoPath+file.originalname, (err) => {
+      console.err('Error in move file');
+    });
+  }
+  res.send(file);
+});
+
+router.post('/uploadmultiple', store.upload.array('files', 12), (req, res, next) => {
+  // TODO add support multifiles
+  const files = req.files;
+  if (!files) {
+    const error = new Error('Please choose files');
+    error.httpStatusCode = 400;
+    return next(error);
+  }
+  res.send(files);
+});
+
+router.get('/download', (req, res) => {
+  if(!req.param('filename') && !req.param('type')) return res.sendStatus(400);
+    let file = 'File' === req.param('type') 
+    ? `${filePath}${req.param('filename')}` 
+    : `${photoPath}/media/photo/${req.param('filename')}`;
+    if(!fs.existsSync(file)) {
+      console.error(`${file} not found!`);
+      res.status(406).send('File not found!');
+    } 
+    res.sendFile(file);
+});
+
+
+module.exports = {router};

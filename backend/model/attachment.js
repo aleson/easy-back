@@ -23,7 +23,7 @@ const AttachmentModelSchema = new Schema({
     _url: String,
     _type: {
         type: String,
-        enum: ['Photo', 'Book']
+        enum: ['Photo', 'File']
     },
     _reference: Schema.Types.ObjectId,
     _creationDate: {

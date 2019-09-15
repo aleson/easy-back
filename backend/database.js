@@ -128,9 +128,6 @@ const deleteGenre = (id) => {
     });
 };
 
-//Attachments
-// TODO make it
-
 module.exports = { 
     findAllUsers, findUserById, saveUser, updateUser, deleteUser,
     findAllBooks, findBookById, saveBook, updateBook, deleteBook,
