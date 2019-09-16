@@ -19,11 +19,6 @@ const GenreModelSchema = new Schema({
         maxlength: [20, invalidMessage],
         unique: false
     },
-    _url: String,
-    _bookId: {
-        type: Schema.Types.ObjectId,
-        ref: 'Book'
-    },
     _creationDate: {
         type: Date,
         default: () => Date.now()

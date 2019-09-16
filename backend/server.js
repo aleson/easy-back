@@ -2,7 +2,7 @@
 const http = require("http");
 const express = require('express');
 
-const rest = require('./service/router');
+const rest = require('./router');
 const errorHandler = require('./error-handler');
 // ------------------ Constants -------------------------
 const app = express();

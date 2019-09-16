@@ -29,7 +29,10 @@ const AttachmentModelSchema = new Schema({
         type: String,
         enum: ['Photo', 'File']
     },
-    _reference: Schema.Types.ObjectId,
+    _reference: {
+        type: String, //Schema.Types.ObjectId
+        required: true
+    },
     _creationDate: {
         type: Date,
         default: () => Date.now()

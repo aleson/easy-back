@@ -26,7 +26,6 @@ const BookModelSchema = new Schema({
     _genre: {
         type: Schema.Types.ObjectId,
         ref: 'Genre',
-        required: true
     },
     _description: {
         type: String,

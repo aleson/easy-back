@@ -132,9 +132,9 @@ const deleteGenre = (id) => {
 // Attachments
 const saveAttachment = (json) => {
     let attach = new AttachmentModel(json);
-    AttachmentModel.save((err) => {
+    attach.save((err) => {
         if(err) throw err;
-        console.log(`Create '${genre._name}' attachment!`);
+        console.log(`Create '${attach._name}' attachment!`);
     });
 };
 

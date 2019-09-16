@@ -3,8 +3,8 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 const fs = require('fs');
 
-const db = require('./database');
-const store = require('./storage');
+const db = require('./service/database');
+const store = require('./service/storage');
 
 const urlencodedParser = bodyParser.urlencoded({extended: true});
 const filePath = `${__dirname}/media/file/`;
@@ -103,7 +103,7 @@ router.delete('/genre/delete', urlencodedParser, (req, res) => {
 });
 
 // Store files
-router.post('/uploadfile', store.upload.single('file'), (req, res, next) => {
+router.post('/uploadfile', store.upload.single('_file'), (req, res, next) => {
   const file = req.file;
   if(!req.param('_type')) res.sendStatus(400);
   if (!file) {
@@ -118,22 +118,24 @@ router.post('/uploadfile', store.upload.single('file'), (req, res, next) => {
     });
     path = photoPath+file.originalname;
   }
-
-  db.saveAttachment({
-    "_id": req.param('_id'),
-    "_filename": req.param('_filename'),
-    "_type": req.param('_type'),
-    "_url": path,
-    "_regerence": req.param('_reference'),
-    "_creationDate": Date.now(),
-    "_modificationDate": Date.now()
-  });
-
+  try {
+    db.saveAttachment({
+      "_filename": file.originalname,
+      "_type": req.param('_type'),
+      "_url": req.param('_type') === 'Photo' ? `/media/photo/${file.originalname}` : `/media/file/${file.originalname}`,
+      "_reference": req.param('_reference'),
+      "_creationDate": Date.now(),
+      "_modificationDate": Date.now()
+    });
+  } catch(err) {
+    fs.unlinkSync(path);
+    throw err;
+  }
 
   res.send(file);
 });
 
-router.post('/uploadmultiple', store.upload.array('_filenames', 12), (req, res, next) => {
+router.post('/uploadmultiple', store.upload.array('_files', 12), (req, res, next) => {
   // TODO add support multifiles
   const files = req.files;
   if (!files) {
@@ -152,7 +154,7 @@ router.get('/download', (req, res) => {
     if(!fs.existsSync(file)) {
       console.error(`${file} not found!`);
       res.status(406).send('File not found!');
-    } 
+    }
     res.sendFile(file);
 });
 
