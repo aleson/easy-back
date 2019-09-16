@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
-const UserModel = require('./model/user');
-const BookModel = require('./model/book');
-const GenreModel = require('./model/genre');
+const UserModel = require('../model/user');
+const BookModel = require('../model/book');
+const GenreModel = require('../model/genre');
+const AttachmentModel = require('../model/attachment');
 
 const dbName = 'TEST_DB';//process.env.BOOKLING_DB_NAME;
 const dbHost = '127.0.0.1';//process.env.BOOKLING_DB_HOST;
@@ -128,8 +129,18 @@ const deleteGenre = (id) => {
     });
 };
 
+// Attachments
+const saveAttachment = (json) => {
+    let attach = new AttachmentModel(json);
+    AttachmentModel.save((err) => {
+        if(err) throw err;
+        console.log(`Create '${genre._name}' attachment!`);
+    });
+};
+
 module.exports = { 
     findAllUsers, findUserById, saveUser, updateUser, deleteUser,
     findAllBooks, findBookById, saveBook, updateBook, deleteBook,
-    findAllGenres, findGenreById, saveGenre, updateGenre, deleteGenre
+    findAllGenres, findGenreById, saveGenre, updateGenre, deleteGenre,
+    saveAttachment
 };

@@ -3,7 +3,6 @@ const uuid = require('node-uuid');
 
 const Schema = mongoose.Schema;
 const invalidExtension = 'Incorrect extension!';
-const invalidFileSize = 'Invalid file size!';
 
 /**
  * Attachment may be photo of users/authors/books or documents(books).
@@ -14,10 +13,15 @@ const AttachmentModelSchema = new Schema({
        default: () => uuid.v4(),
        unique: true
     },
-    _name: {
+    _filename: {
         type: String,
-        minlength: [1, invalidMessage],
-        maxlength: [20, invalidMessage],
+        validate: {
+            validator: (value) => {
+                let regExp = /\.[0-9a-z]{1,5}[doc, docx, pdf,fb2]$/;
+                return (value != null && value.trim().length > 0) || regExp.test(value);
+            },
+            message: invalidExtension
+        },
         unique: false
     },
     _url: String,
@@ -38,4 +42,4 @@ const AttachmentModelSchema = new Schema({
 
 const AttachmentModel = mongoose.model('Attachment', AttachmentModelSchema);
 
-module.exports = UserModel;
+module.exports = AttachmentModel;

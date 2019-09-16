@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const fs = require('fs');
 
 const db = require('./database');
-const store = require('./service/storage');
+const store = require('./storage');
 
 const urlencodedParser = bodyParser.urlencoded({extended: true});
 const filePath = `${__dirname}/media/file/`;
@@ -105,21 +105,35 @@ router.delete('/genre/delete', urlencodedParser, (req, res) => {
 // Store files
 router.post('/uploadfile', store.upload.single('file'), (req, res, next) => {
   const file = req.file;
-  if(!req.param('type')) res.sendStatus(400);
+  if(!req.param('_type')) res.sendStatus(400);
   if (!file) {
     const error = new Error('Please upload a file!');
     error.httpStatusCode = 400;
     return next(error);
   }
-  if(req.param('type') === 'Photo') {
-    fs.rename(filePath+file.originalname, photoPath+file.originalname, (err) => {
+  let path = filePath+file.originalname;
+  if(req.param('_type') === 'Photo') {
+    fs.rename(path, photoPath+file.originalname, (err) => {
       console.err('Error in move file');
     });
+    path = photoPath+file.originalname;
   }
+
+  db.saveAttachment({
+    "_id": req.param('_id'),
+    "_filename": req.param('_filename'),
+    "_type": req.param('_type'),
+    "_url": path,
+    "_regerence": req.param('_reference'),
+    "_creationDate": Date.now(),
+    "_modificationDate": Date.now()
+  });
+
+
   res.send(file);
 });
 
-router.post('/uploadmultiple', store.upload.array('files', 12), (req, res, next) => {
+router.post('/uploadmultiple', store.upload.array('_filenames', 12), (req, res, next) => {
   // TODO add support multifiles
   const files = req.files;
   if (!files) {
@@ -131,10 +145,10 @@ router.post('/uploadmultiple', store.upload.array('files', 12), (req, res, next)
 });
 
 router.get('/download', (req, res) => {
-  if(!req.param('filename') && !req.param('type')) return res.sendStatus(400);
-    let file = 'File' === req.param('type') 
-    ? `${filePath}${req.param('filename')}` 
-    : `${photoPath}/media/photo/${req.param('filename')}`;
+  if(!req.param('_filename') && !req.param('_type')) return res.sendStatus(400);
+    let file = 'File' === req.param('_type') 
+    ? `${filePath}${req.param('_filename')}` 
+    : `${photoPath}/media/photo/${req.param('_filename')}`;
     if(!fs.existsSync(file)) {
       console.error(`${file} not found!`);
       res.status(406).send('File not found!');
