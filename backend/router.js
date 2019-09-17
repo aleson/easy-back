@@ -135,17 +135,6 @@ router.post('/uploadfile', store.upload.single('_file'), (req, res, next) => {
   res.send(file);
 });
 
-router.post('/uploadmultiple', store.upload.array('_files', 12), (req, res, next) => {
-  // TODO add support multifiles
-  const files = req.files;
-  if (!files) {
-    const error = new Error('Please choose files');
-    error.httpStatusCode = 400;
-    return next(error);
-  }
-  res.send(files);
-});
-
 router.get('/download', (req, res) => {
   if(!req.param('_filename') && !req.param('_type')) return res.sendStatus(400);
     let file = 'File' === req.param('_type') 

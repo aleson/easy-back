@@ -24,17 +24,22 @@ const BookModelSchema = new Schema({
         unique: false
     },
     _genre: {
-        type: Schema.Types.ObjectId,
+        type: String,
         ref: 'Genre',
     },
     _description: {
         type: String,
         unique: false
     },
-    _url: String,
     _userId: {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
+        type: String,
+        ref: 'User', 
+        required: true
+    },
+    _fileId: {
+        type: String,
+        ref: 'Attachment',
+        required: true
     },
     _creationDate: {
         type: Date,

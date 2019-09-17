@@ -44,9 +44,12 @@ const UserModelSchema = new Schema({
         minlength: [8, invalidPasswordLength],
         unique: false
     },
-    _photo: Buffer,
+    _photoId: {
+        type: String,
+        ref: 'Attachment'
+    },
     _bookId: {
-        type: Schema.Types.ObjectId,
+        type: String,
         ref: 'Book'
     },
     _creationDate: {
@@ -56,8 +59,7 @@ const UserModelSchema = new Schema({
     _modificationDate: {
         type: Date,
         default: () => Date.now()
-    },
-    _url: String
+    }
 });
 
 const UserModel = mongoose.model('User', UserModelSchema);

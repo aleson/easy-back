@@ -17,7 +17,7 @@ const AttachmentModelSchema = new Schema({
         type: String,
         validate: {
             validator: (value) => {
-                let regExp = /\.[0-9a-z]{1,5}[doc, docx, pdf,fb2]$/;
+                let regExp = /^.*\.(jpg|JPG|gif|GIF|doc|DOC|docx|DOCX|pdf|PDF|fb2|FB2|djvu|DJVU)$/;
                 return (value != null && value.trim().length > 0) || regExp.test(value);
             },
             message: invalidExtension
@@ -30,7 +30,7 @@ const AttachmentModelSchema = new Schema({
         enum: ['Photo', 'File']
     },
     _reference: {
-        type: String, //Schema.Types.ObjectId
+        type: String,
         required: true
     },
     _creationDate: {
