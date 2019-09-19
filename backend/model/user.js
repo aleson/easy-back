@@ -37,12 +37,15 @@ const UserModelSchema = new Schema({
     _username: {
         type: String,
         minlength: [minValueCharacterOfName, invalidNameLength],
-        maxlength: [maxValueCharacterOfName, invalidNameLength]
+        maxlength: [maxValueCharacterOfName, invalidNameLength],
+        unique: true,
+        required: true
     },
     _password: {
         type: String,
         minlength: [8, invalidPasswordLength],
-        unique: false
+        unique: false,
+        required: true
     },
     _photoId: {
         type: String,

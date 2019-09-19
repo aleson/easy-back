@@ -28,6 +28,11 @@ const findUserById = (res, id) => {
     });
 };
 
+const findUserByUsername = (res, username) => {
+    UserModel.find({"_username": username})
+    .then((user) => res.send(user));
+}
+
 const saveUser = (json) => {
     let user = new UserModel(json);  
     user.save((err) => {
@@ -59,6 +64,11 @@ const findAllBooks = (res, size) => {
         res.send(books);
     });
 };
+
+const findBookByName = (res, name) => {
+    BookModel.find({"_name": name})
+    .then((book) => res.send(book));
+}
 
 const findBookById = (res, id) => {
     BookModel.findById(id)
@@ -139,8 +149,8 @@ const saveAttachment = (json) => {
 };
 
 module.exports = { 
-    findAllUsers, findUserById, saveUser, updateUser, deleteUser,
-    findAllBooks, findBookById, saveBook, updateBook, deleteBook,
+    findAllUsers, findUserById, findUserByUsername, saveUser, updateUser, deleteUser,
+    findAllBooks, findBookById, findBookByName, saveBook, updateBook, deleteBook,
     findAllGenres, findGenreById, saveGenre, updateGenre, deleteGenre,
     saveAttachment
 };

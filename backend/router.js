@@ -48,7 +48,11 @@ router.delete('/user/delete', urlencodedParser, (req, res) => {
 
 // Books
 router.get('/book', urlencodedParser, (req,res) => {
-  db.findBookById(res, req.param('_id'));
+  if(req.param('_id')) {
+    db.findBookById(res, req.param('_id'));
+  } else if(req.param('_name')) {
+    db.findBookByName(req.param('_name'));
+  } else return res.sendStatus(400);
 });
 
 router.get('/books', urlencodedParser, (req, res) => {

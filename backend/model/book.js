@@ -21,7 +21,7 @@ const BookModelSchema = new Schema({
         type: String,
         minlength: [minValueCharacterOfName, invalidNameLength],
         maxlength: [maxValueCharacterOfName, invalidNameLength],
-        unique: false
+        unique: true
     },
     _genre: {
         type: String,
